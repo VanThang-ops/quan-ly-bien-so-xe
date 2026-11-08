@@ -1,0 +1,28 @@
+# Executables
+*.exe
+*.out
+*.o
+*.obj
+*.dll
+*.so
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Build
+build/
+cmake-build-*/
+Debug/
+Release/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*.log
