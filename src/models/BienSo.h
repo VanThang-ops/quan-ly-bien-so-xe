@@ -29,26 +29,42 @@ inline bool isDigits(const std::string& value) {
     return !value.empty();
 }
 
+inline bool parseMaTinh(const std::string& raw, std::string& maTinh) {
+    const std::string value = trimCopy(raw);
+    if (value.size() != 2 || !isDigits(value)) {
+        return false;
+    }
+    maTinh = value;
+    return true;
+}
+
+inline bool parseMaXa(const std::string& raw, std::string& maXa) {
+    std::string value = trimCopy(raw);
+    if (value.size() != 2) {
+        return false;
+    }
+    for (unsigned char ch : value) {
+        if (!std::isalnum(ch)) return false;
+    }
+    for (char& ch : value) {
+        ch = static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
+    }
+    maXa = value;
+    return true;
+}
+
 inline bool parseBienSo(const std::string& raw, BienSoXe& result) {
     const std::string value = trimCopy(raw);
-    if (value.size() != 12 || value[2] != '-' || value[5] != '-') {
+    if (value.size() != 11 || value[2] != '-' || value[5] != '-') {
         return false;
     }
 
     BienSoXe parsed;
-    parsed.maTinh = value.substr(0, 2);
-    parsed.maXa = value.substr(3, 2);
+    if (!parseMaTinh(value.substr(0, 2), parsed.maTinh)) return false;
+    if (!parseMaXa(value.substr(3, 2), parsed.maXa)) return false;
+
     parsed.seri = value.substr(6, 5);
-
-    if (!isDigits(parsed.maTinh) || !isDigits(parsed.seri)) return false;
-
-    for (unsigned char ch : parsed.maXa) {
-        if (!std::isalnum(ch)) return false;
-    }
-
-    for (char& ch : parsed.maXa) {
-        ch = static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
-    }
+    if (!isDigits(parsed.seri)) return false;
 
     result = parsed;
     return true;

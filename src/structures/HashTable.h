@@ -57,6 +57,36 @@ public:
 
     std::size_t getSize() const { return size; }
 
+    double loadFactor() const {
+        return static_cast<double>(size) / static_cast<double>(TABLE_SIZE);
+    }
+
+    std::size_t bucketSize(std::size_t index) const {
+        if (index >= TABLE_SIZE) return 0;
+        std::size_t count = 0;
+        for (const Node* current = table[index]; current != nullptr; current = current->next) {
+            ++count;
+        }
+        return count;
+    }
+
+    std::size_t usedBuckets() const {
+        std::size_t used = 0;
+        for (std::size_t i = 0; i < TABLE_SIZE; ++i) {
+            if (table[i] != nullptr) ++used;
+        }
+        return used;
+    }
+
+    std::size_t maxBucketSize() const {
+        std::size_t maxCount = 0;
+        for (std::size_t i = 0; i < TABLE_SIZE; ++i) {
+            const std::size_t currentCount = bucketSize(i);
+            if (currentCount > maxCount) maxCount = currentCount;
+        }
+        return maxCount;
+    }
+
     void clear() {
         for (std::size_t i = 0; i < TABLE_SIZE; ++i) {
             LinkedList::clear(table[i]);
