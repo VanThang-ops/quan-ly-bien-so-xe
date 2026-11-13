@@ -9,5 +9,5 @@
 | 5 | QA/QC & tối ưu | `tests/`; test biên/không hợp lệ; memory leak; đo hiệu năng | Kiểm thử và đánh giá |
 | 6 | AI & báo cáo | AI log; biên tập báo cáo; slide; kịch bản demo | Khai thác và sử dụng AI |
 
-## Lưu ý cho nhóm trưởng
-Theo kế hoạch ban đầu, thành viên 1 và thành viên 2 là hai vai trò riêng. Nếu một người kiêm cả hai, nhóm cần xác nhận lại phân công để bảo đảm không bỏ trống nhiệm vụ và vẫn đáp ứng yêu cầu mọi thành viên tham gia các giai đoạn chung.
+## Nguyên tắc phối hợp
+Nhóm gồm đủ 6 thành viên đảm nhận 6 vai trò độc lập từ Thành viên 1 đến Thành viên 6. Mọi thành viên đều tham gia đầy đủ các giai đoạn: Phân tích, Thiết kế, Cài đặt/Kiểm thử, Viết báo cáo và Vấn đáp cá nhân.
