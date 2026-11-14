@@ -5,8 +5,10 @@
 struct Node {
     BienSoXe data;
     Node* next;
+    explicit Node(const BienSoXe& value) : data(value), next(nullptr) {}
 };
-struct LinkedList {
+class LinkedList {
+public:
     static bool contains(const Node* head, const std::string& plate) {
         const Node* current = head;
         while (current != nullptr) {
@@ -16,8 +18,7 @@ struct LinkedList {
         return false;
     }
     static void insertFront(Node*& head, const BienSoXe& value) {
-        Node* newNode = new Node;
-        newNode->data = value;
+        Node* newNode = new Node(value);
         newNode->next = head;
         head = newNode;
     }
