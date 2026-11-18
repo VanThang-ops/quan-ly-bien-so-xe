@@ -1,0 +1,47 @@
+MỤC 7. KẾT QUẢ THỰC HIỆN VÀ MINH HỌA GIAO DIỆN 
+7.1. Xây dựng Module Quản lý Tệp tin (FileIO.h)
+Chức năng đọc file (loadFromFile): Sử dụng thư viện <fstream> để mở file dữ liệu data_bienso.txt. Quá trình đọc duyệt qua từng dòng, kết hợp hàm trimCopy() để lọc bỏ các khoảng trắng thừa hoặc dòng trống. Dữ liệu sau đó được nạp trực tiếp vào tầng service thông qua hàm service.registerPlate().
+Chức năng ghi file (saveToFile): Duyệt qua toàn bộ các bucket của bảng băm (HashTable) bằng hàm bucketAt(), lấy chuỗi thông tin của từng biển số xe (toString()) và ghi tuần tự ra tệp văn bản, đảm bảo dữ liệu không bị mất mát khi tắt chương trình.
+7.2. Xây dựng Giao diện Điều khiển Console (Menu.h)
+Xây dựng giao diện dòng lệnh (CLI) trực quan, hiển thị đầy đủ các chức năng chính của hệ thống từ đăng ký, tra cứu đến đọc/ghi file.
+Xử lý ngoại lệ nhập liệu (Input Validation): Áp dụng kỹ thuật kiểm tra trạng thái của luồng nhập (std::cin.fail()), kết hợp với std::cin.clear() và std::cin.ignore() để xử lý triệt để lỗi khi người dùng lỡ nhập chữ cái thay vì số lựa chọn menu, ngăn chặn hoàn toàn tình trạng lặp vô tận (infinite loop) của chương trình.
+7.3. Đánh giá kết quả tích hợp
+Module I/O và UI đã hoạt động trơn tru, khớp nối chính xác với các cấu trúc dữ liệu (LinkedList, HashTable) và tầng xử lý nghiệp vụ (LicensePlateService).
+Các kịch bản kiểm thử đọc file mẫu và tương tác qua menu đều cho kết quả chính xác, ổn định.
+MỤC 8. BẢNG PHÂN CÔNG VÀ ĐÁNH GIÁ MỨC ĐỘ HOÀN THÀNH
+Thành viên
+Vai trò
+Module / Đầu việc chính
+Tài liệu / Báo cáo phụ trách
+Tỷ lệ đóng góp
+1
+Nhóm trưởng kiêm kiến trúc
+Điều phối; thống nhất API; tích hợp; rà soát BienSo.h, HashTable.h; quản lý tiến độ
+Thiết kế kiến trúc, giới thiệu, thiết kế
+16.6%
+2
+Thuật toán Core
+LinkedList.h; đăng ký và tra cứu; kiểm tra trùng; quản lý node
+Phân tích bài toán, sơ đồ chèn/tìm
+16.6%
+3
+Thống kê
+Hai hàm lọc theo tỉnh/xã trong LicensePlateService.h; loại trùng mã xã
+Thuật toán duyệt bảng, kết quả
+16.6%
+4
+File I/O & UI
+FileIO.h , Menu.h , dữ liệu TXT, kiểm tra nhập
+Kết quả, bảng phân công
+16.6%
+5
+QA/QC & tối ưu
+tests/; test biên/không hợp lệ; memory leak; đo hiệu năng
+Kiểm thử và đánh giá
+16.6%
+6
+AI & báo cáo
+AI log; biên tập báo cáo; slide; kịch bản demo
+Khai thác và sử dụng AI
+16.6%
+
