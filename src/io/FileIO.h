@@ -7,6 +7,7 @@
 
 class FileIO {
 public:
+    // Đọc dữ liệu từ file văn bản vào bảng băm thông qua tầng service
     static bool loadFromFile(const std::string& path, LicensePlateService& service) {
         std::ifstream input(path);
         if (!input.is_open()) return false;
@@ -14,12 +15,15 @@ public:
         std::string line;
         while (std::getline(input, line)) {
             if (trimCopy(line).empty()) continue;
-            // Dòng sai định dạng hoặc trùng sẽ bị bỏ qua ở bước nạp.
+
+            // Dòng sai định dạng hoặc biển số đã tồn tại sẽ bị bỏ qua ở bước nạp.
             service.registerPlate(line);
         }
+
         return !input.bad();
     }
 
+    // Lưu toàn bộ dữ liệu từ bảng băm ra file văn bản
     static bool saveToFile(const std::string& path, const HashTable& table) {
         std::ofstream output(path);
         if (!output.is_open()) return false;
@@ -30,7 +34,9 @@ public:
                 output << current->data.toString() << '\n';
             }
         }
-        return output.good();
+
+        output.close();
+        return !output.fail();
     }
 };
 
