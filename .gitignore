@@ -26,3 +26,5 @@ desktop.ini
 *.tmp
 *.bak
 *.log
+/.vs
+
