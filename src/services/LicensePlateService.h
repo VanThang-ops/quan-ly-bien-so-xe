@@ -1,6 +1,6 @@
 #ifndef LICENSE_PLATE_SERVICE_H
 #define LICENSE_PLATE_SERVICE_H
-#include <unordered_set>
+
 #include <string>
 #include <vector>
 #include "../structures/HashTable.h"
@@ -21,7 +21,6 @@ public:
 
     std::vector<std::string> getCommuneCodesByProvince(const std::string& provinceCode) const {
         std::vector<std::string> result;
-        std::unordered_set<std::string> seen;
 
         std::string maTinh;
         if (!parseMaTinh(provinceCode, maTinh)) {
@@ -33,10 +32,15 @@ public:
 
             while (current != nullptr) {
                 if (current->data.maTinh == maTinh) {
-                    std::string maXa = current->data.maXa;
-
-                    if (seen.insert(maXa).second) {
-                        result.push_back(maXa);
+                    bool exists = false;
+                    for (const std::string& code : result) {
+                        if (code == current->data.maXa) {
+                            exists = true;
+                            break;
+                        }
+                    }
+                    if (!exists) {
+                        result.push_back(current->data.maXa);
                     }
                 }
 
