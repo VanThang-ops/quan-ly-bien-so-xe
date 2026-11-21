@@ -4,10 +4,11 @@
 #include <cstddef>
 #include <string>
 #include "LinkedList.h"
+using namespace std;
 
 class HashTable {
 public:
-    static constexpr std::size_t TABLE_SIZE = 101;
+    static constexpr size_t TABLE_SIZE = 101;
 
     HashTable() : table{} {}
 
@@ -18,77 +19,109 @@ public:
     HashTable(const HashTable&) = delete;
     HashTable& operator=(const HashTable&) = delete;
 
-    std::size_t hashFunction(const std::string& key) const {
-        // DJB2: nhóm có thể phân tích và so sánh với Polynomial Rolling.
+    // Hàm băm DJB2: trả về chỉ số bucket từ 0 đến 100
+    size_t hashFunction(const string& key) const {
         unsigned long hash = 5381;
-        for (unsigned char ch : key) {
-            hash = ((hash << 5) + hash) + ch;
+        for (size_t i = 0; i < key.size(); i++) {
+            unsigned char ch = (unsigned char)key[i];
+            hash = hash * 33 + ch; // Tương đương ((hash << 5) + hash) + ch
         }
         return hash % TABLE_SIZE;
     }
 
+    // Thêm biển số vào bảng băm (Separate Chaining)
     bool insert(const BienSoXe& value) {
-        const std::string key = value.toString();
-        const std::size_t index = hashFunction(key);
-        if (LinkedList::contains(table[index], key)) return false;
+        string key = value.toString();
+        size_t index = hashFunction(key);
+
+        // Kiểm tra trùng trong bucket trước khi thêm
+        if (LinkedList::contains(table[index], key)) {
+            return false;
+        }
+
         LinkedList::insertFront(table[index], value);
-        ++size;
+        size++;
         return true;
     }
 
-    const BienSoXe* find(const std::string& key) const {
-        const std::size_t index = hashFunction(key);
-        for (const Node* current = table[index]; current != nullptr; current = current->next) {
-            if (current->data.toString() == key) return &current->data;
+    // Tìm kiếm biển số theo khóa chuẩn "ab-cd-ghxyz"
+    const BienSoXe* find(const string& key) const {
+        size_t index = hashFunction(key);
+        const Node* current = table[index];
+
+        while (current != nullptr) {
+            if (current->data.toString() == key) {
+                return &current->data;
+            }
+            current = current->next;
         }
         return nullptr;
     }
 
-    bool remove(const std::string& key) {
-        const std::size_t index = hashFunction(key);
-        if (!LinkedList::remove(table[index], key)) return false;
-        --size;
+    // Xóa biển số khỏi bảng băm
+    bool remove(const string& key) {
+        size_t index = hashFunction(key);
+        if (!LinkedList::remove(table[index], key)) {
+            return false;
+        }
+        size--;
         return true;
     }
 
-    const Node* bucketAt(std::size_t index) const {
-        return index < TABLE_SIZE ? table[index] : nullptr;
+    // Lấy con trỏ đầu của bucket thứ index
+    const Node* bucketAt(size_t index) const {
+        if (index < TABLE_SIZE) {
+            return table[index];
+        }
+        return nullptr;
     }
 
-    std::size_t getSize() const { return size; }
+    size_t getSize() const { return size; }
 
+    // Hệ số tải alpha = N / M
     double loadFactor() const {
-        return static_cast<double>(size) / static_cast<double>(TABLE_SIZE);
+        return (double)size / (double)TABLE_SIZE;
     }
 
-    std::size_t bucketSize(std::size_t index) const {
+    // Đếm số lượng phần tử trong bucket thứ index
+    size_t bucketSize(size_t index) const {
         if (index >= TABLE_SIZE) return 0;
-        std::size_t count = 0;
-        for (const Node* current = table[index]; current != nullptr; current = current->next) {
-            ++count;
+
+        size_t count = 0;
+        const Node* current = table[index];
+        while (current != nullptr) {
+            count++;
+            current = current->next;
         }
         return count;
     }
 
-    std::size_t usedBuckets() const {
-        std::size_t used = 0;
-        for (std::size_t i = 0; i < TABLE_SIZE; ++i) {
-            if (table[i] != nullptr) ++used;
+    // Đếm số bucket hiện đang có dữ liệu (khác nullptr)
+    size_t usedBuckets() const {
+        size_t used = 0;
+        for (size_t i = 0; i < TABLE_SIZE; i++) {
+            if (table[i] != nullptr) {
+                used++;
+            }
         }
         return used;
     }
 
-    std::size_t maxBucketSize() const {
-        std::size_t maxCount = 0;
-        for (std::size_t i = 0; i < TABLE_SIZE; ++i) {
-            const std::size_t currentCount = bucketSize(i);
-            if (currentCount > maxCount) maxCount = currentCount;
+    // Tìm độ dài của chuỗi liên kết dài nhất trong bảng băm
+    size_t maxBucketSize() const {
+        size_t maxCount = 0;
+        for (size_t i = 0; i < TABLE_SIZE; i++) {
+            size_t currentCount = bucketSize(i);
+            if (currentCount > maxCount) {
+                maxCount = currentCount;
+            }
         }
         return maxCount;
     }
 
+    // Giải phóng toàn bộ bộ nhớ động trong các bucket
     void clear() {
-        for (std::size_t i = 0; i < TABLE_SIZE; ++i) {
+        for (size_t i = 0; i < TABLE_SIZE; i++) {
             LinkedList::clear(table[i]);
         }
         size = 0;
@@ -96,7 +129,7 @@ public:
 
 private:
     Node* table[TABLE_SIZE];
-    std::size_t size = 0;
+    size_t size = 0;
 };
 
 #endif
